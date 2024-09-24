@@ -92,7 +92,6 @@ impl Perform for VteTerminal {
             self.cursor_y += 1;
         }
         if self.cursor_y >= self.height {
-            // Scroll the screen up
             self.screen.drain(0..self.width);
             self.screen.extend(std::iter::repeat(' ').take(self.width));
             self.cursor_y = self.height - 1;
@@ -284,9 +283,8 @@ impl TerminalWidget {
     
         ui.vertical(|ui| {
             let available_size = ui.available_size();
-            let output_height = available_size.y - 30.0; // Reserve space for input
+            let output_height = available_size.y - 30.0;
     
-            // Output area
             egui::ScrollArea::vertical()
                 .auto_shrink([false; 2])
                 .stick_to_bottom(true)
@@ -302,7 +300,6 @@ impl TerminalWidget {
                     );
                 });
     
-            // Input area
             ui.horizontal(|ui| {
                 ui.label(&self.prompt);
                 let response = ui.add(
@@ -321,7 +318,6 @@ impl TerminalWidget {
                     response.request_focus();
                 }
     
-                // Handle up/down arrow keys for history navigation
                 if ui.input(|i| i.key_pressed(egui::Key::ArrowUp)) {
                     if let Some(prev_command) = self.get_previous_command() {
                         self.input = prev_command;
@@ -382,7 +378,7 @@ impl PhantomTTY {
             terminal: TerminalWidget::new(),
             term,
             pty_master: None,
-            vte_terminal: VteTerminal::new(80, 24), // Adjust size as needed
+            vte_terminal: VteTerminal::new(80, 24),
         };
         phantom_tty.terminal.set_output("Welcome to PhantomTTY!\n");
         
@@ -458,7 +454,7 @@ impl PhantomTTY {
         if let Some(ref mut master) = self.pty_master {
             let mut fd_set = FdSet::new();
             fd_set.insert(master.as_raw_fd());
-            let mut timeout = TimeVal::new(0, 100_000); // 100ms timeout
+            let mut timeout = TimeVal::new(0, 100_000);
             match select(None, Some(&mut fd_set), None, None, Some(&mut timeout)) {
                 Ok(_) => {
                     if fd_set.contains(master.as_raw_fd()) {
@@ -545,7 +541,6 @@ impl eframe::App for PhantomTTYApp {
         egui::CentralPanel::default().show(ctx, |ui| {
             let available_size = ui.available_size();
             
-            // Use the available size to layout your terminal widget
             if let Some(command) = self.phantom_tty.terminal.show(ui, ctx) {
                 if let Err(e) = self.phantom_tty.execute_command(&command) {
                     self.phantom_tty.terminal.set_output(&format!("Error: {}", e));
@@ -553,7 +548,6 @@ impl eframe::App for PhantomTTYApp {
             }
         });
 
-        // Request continuous repainting to ensure smooth updates
         ctx.request_repaint();
     }
 }
