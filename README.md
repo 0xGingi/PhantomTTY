@@ -1,6 +1,6 @@
 # PhantomTTY
 
-PhantomTTY is a terminal emulator built with Rust using the egui framework. It provides a lightweight, customizable terminal experience with features like command history, tab completion, and a disgusting and unusable graphical interface.
+PhantomTTY is a terminal emulator built with Rust using the egui framework. It provides a lightweight, unusable terminal experience with features like command history, tab completion, and a disgusting and unusable graphical interface.
 
 ## Features
 
