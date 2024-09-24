@@ -1,0 +1,14 @@
+[package]
+name = "PhantomTTY"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+dirs = "5.0"
+rustyline = "14.0.0"
+eframe = "0.28.1"
+ansi_term = "0.12"
+nix = "0.26.2"
+libc = "0.2.144"
+regex = "1.5.0"
+vte = "0.11.0"
